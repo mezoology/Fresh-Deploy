@@ -24,4 +24,3 @@ done
 text="$(print_wrap $WIDTH "${statuses[@]}")"
 
 print_columns "Services" "$text"
-httpd

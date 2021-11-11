@@ -5,5 +5,5 @@ if [ "$BASH" ]; then
     . ~/.bashrc
   fi
 fi
-/opt/fresh/ansible/data/motd/motd.sh
+/opt/nsible/data/motd/motd.sh
 mesg n || true

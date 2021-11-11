@@ -1,0 +1,34 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: update && upgrade $$ install 
+      apt: 
+        update_cache: yes
+#        udpgrade: dist
+        name: "{{ item }}"               
+      loop:
+        - fail2ban
+        - figlet
+        - bc
+        - fortune
+    - name: add motd script to .profile
+      ansible.builtin.blockinfile:
+        state: present
+        path: ~/.profile
+        content: |
+                  /opt/deploy/ansible/data/motd/motd.sh
+    - name: download the repo
+      git:
+        repo: 'https://github.com/mezoology/Fresh-Deploy.git'
+        dest: /opt/deploy
+        clone: yes
+        update: yes
+    - name: edit motd permissions
+      ansible.builtin.file:
+        path: /opt/deploy
+        state: directory
+        recurse: yes
+        owner: '1000'
+        group: '1000'
+        mode: '0755'
