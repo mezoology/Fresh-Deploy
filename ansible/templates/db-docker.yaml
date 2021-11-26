@@ -8,10 +8,10 @@ services:
       - /opt/docker/mariadb:/var/lib/mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: "B4PWIivE9Q.hAID#YO]C"
+      MYSQL_ROOT_PASSWORD: "pass"
       MYSQL_DATABASE: "npm"
       MYSQL_USER: "npm"
-      MYSQL_PASSWORD: ".hAID#YO]C"
+      MYSQL_PASSWORD: "pass"
     networks:
       - main
 
@@ -26,7 +26,7 @@ services:
       - '8080:80'
     environment:
       PMA_HOST: "mariadb"
-      MYSQL_ROOT_PASSWORD: "B4PWIivE9Q.hAID#YO]C" 
+      MYSQL_ROOT_PASSWORD: "pass" 
     networks:
       - main
 
@@ -73,6 +73,10 @@ services:
 
 networks:
   main:
-
+    enable_ipv6: true
+    ipam:
+      config:
+        - subnet: 2001:db8:909::/64
+          gateway: 2001:db8:909::1
 volumes:
   portainer_data:
