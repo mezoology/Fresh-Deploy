@@ -1,0 +1,18 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: copy Docker Compose files
+      ansible.builtin.copy:
+        src: /home/ansible/docker/{{ item }}
+        dest: /opt/docker/{{ item }}
+      loop:
+      - dp.yaml
+
+    # use files parameter to use multiple docker-compose.yml files
+    - name: deploy Docker Compose stack
+      community.docker.docker_compose:
+        project_src: /opt/docker/
+        files:
+        - dp.yaml
+    

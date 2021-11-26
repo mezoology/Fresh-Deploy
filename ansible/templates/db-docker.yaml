@@ -1,0 +1,78 @@
+version: '3'
+services:
+  # Database
+  mariadb:
+    container_name: mariadb
+    image: mariadb
+    volumes:
+      - /opt/docker/mariadb:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "B4PWIivE9Q.hAID#YO]C"
+      MYSQL_DATABASE: "npm"
+      MYSQL_USER: "npm"
+      MYSQL_PASSWORD: ".hAID#YO]C"
+    networks:
+      - main
+
+  # phpmyadmin
+  phpmyadmin:
+    container_name: phpmyadmin
+    depends_on:
+      - mariadb
+    image: phpmyadmin
+    restart: always
+    ports:
+      - '8080:80'
+    environment:
+      PMA_HOST: "mariadb"
+      MYSQL_ROOT_PASSWORD: "B4PWIivE9Q.hAID#YO]C" 
+    networks:
+      - main
+
+  # Nginx Proxy Manager
+  npm:
+    container_name: npm
+    image: jc21/nginx-proxy-manager:latest
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    environment:
+      DB_MYSQL_HOST: "mariadb"
+      DB_MYSQL_PORT: 3306
+      DB_MYSQL_USER: "npm"
+      # DB_MYSQL_PASSWORD: "npm"  # use secret instead
+      DB_MYSQL_PASSWORD: ".hAID#YO]C"
+      DB_MYSQL_NAME: "npm"
+    networks:
+      - main
+    healthcheck:
+      test: ["CMD", "/bin/check-health"]
+      interval: 10s
+      timeout: 3s
+    volumes:
+      - /opt/docker/npm/app_data:/data
+      - /opt/docker/npm/letsencrypt:/etc/letsencrypt
+    restart: on-failure
+  
+  #Portainer
+  portainer:
+    container_name: portainer
+    image: cr.portainer.io/portainer/portainer-ce:2.9.3
+    privileged: true
+    volumes:
+      - portainer_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - '8000:8000'
+      - '9443:9443'
+    restart: unless-stopped
+    networks:
+      - main
+
+networks:
+  main:
+
+volumes:
+  portainer_data:
