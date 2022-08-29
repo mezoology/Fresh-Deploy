@@ -46,3 +46,4 @@
           cp -R /opt/deploy/ansible/data/powerlevel10k ~/
           cp /opt/deploy/ansible/templates/.zshrc ~/
           cp /opt/deploy/ansible/templates/.p10k.zsh ~/
+          sudo chsh -s /bin/zsh <username>
